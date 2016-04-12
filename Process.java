@@ -12,6 +12,7 @@ public class Process {
     public int toa;
     //So that I may compute avg. wait time, I only track VTU at which process started waiting then calculate difference from CPU time when processing process.
     public int startWaitTime;
+    public int totalWaitTime;
     public long timeStamp;
     public static Random myRandom = new Random((long)0.009);
 
@@ -21,6 +22,7 @@ public class Process {
         this.toa = toa;
         this.startWaitTime = time;
         this.timeStamp = System.currentTimeMillis();
+        this.totalWaitTime = 0;
     }
     public void setStartWaitTime(int time){
         this.startWaitTime = time;

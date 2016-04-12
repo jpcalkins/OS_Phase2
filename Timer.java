@@ -8,6 +8,7 @@ public class Timer {
     private int previousTime;
     //Stats keeps track of fragmentation, rejected jobs, etc.
     public Measurement stats;
+    private final int QUANTUM = 5;
 
     public Timer(){
         this.currentTime = 0;
@@ -24,6 +25,9 @@ public class Timer {
     //f. Increments CPU timeline
     public void incrementCurrentTime(int increment){
         this.currentTime += increment;
+    }
+    public void incrementCurrentTime(){
+        this.currentTime += QUANTUM;
     }
     //f. Increments memory timeline and outputs any statistics if time has passed a necessary interval.
     public void incrementPrevTime(int increment){

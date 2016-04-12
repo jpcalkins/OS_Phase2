@@ -4,11 +4,11 @@
 public class FirstFitStorage extends StorageStrategy {
     //f. Traverses the memory list in order to find the first open block.
     public void addProcess(Process incomingProcess){
-        for(int i=0; i<memory.size(); i++){
-            if(memory.get(i).size >= incomingProcess.size && !memory.get(i).occupied){
-                Block temp = memory.get(i).addJobToBlock(incomingProcess);
+        for(int i=0; i<Computer.memory.size(); i++){
+            if(Computer.memory.get(i).size >= incomingProcess.size && !Computer.memory.get(i).occupied){
+                Block temp = Computer.memory.get(i).addJobToBlock(incomingProcess);
                 if(temp != null){
-                    memory.add(i+1, temp);
+                    Computer.memory.add(i+1, temp);
                 }
                 processQueue.add(incomingProcess.timeStamp);
                 return;

@@ -4,7 +4,6 @@
 import java.util.ArrayList;
 
 public class Measurement {
-    public int rejectedJobs;
     public int totalJobs;
     public int totalWaitTime;
     public int totalProcessingTime;
@@ -15,7 +14,6 @@ public class Measurement {
 
     //f. Constructs an empty set of stats to measure performance.
     public Measurement(){
-        this.rejectedJobs = 0;
         this.totalJobs = 0;
         this.totalWaitTime = 0;
         this.totalProcessingTime = 0;
@@ -62,7 +60,7 @@ public class Measurement {
     }
     //f. For printing stats at 1000VTU intervals, because 1000 is also a multiple of 100, I print the stats for 100 VTU intervals as well.
     public void output1000(){
-        System.out.println("Rejected Jobs:\t" + rejectedJobs);
+        //System.out.println("Rejected Jobs:\t" + rejectedJobs);
         output100();
     }
     //f. For printing stats at 100VTU intervals
@@ -81,6 +79,6 @@ public class Measurement {
     }
     //f. For printing stats at 5000VTU time point
     public void output5000(){
-        System.out.println("Rejected Jobs:\t" + rejectedJobs);
+        //System.out.println("Rejected Jobs:\t" + rejectedJobs);
     }
 }
