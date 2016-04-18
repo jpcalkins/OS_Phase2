@@ -30,7 +30,7 @@ public class Process {
 
     //f. I pass time to the Random process creator for a timestamp so that I may keep track of when process was added to memory for wait time statistics.
     public static Process randJob(int time){
-        return new Process(randSize(), randDuration(), randTOA(), time);
+        return new Process(randSize(), randDuration(), randTOA() + Computer.time.getPreviousTime(), time);
     }
     //f. returns a number between 50 and 300 for Process sizes
     public static int randSize(){
