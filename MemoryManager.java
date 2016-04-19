@@ -7,42 +7,48 @@ import java.util.Queue;
  */
 abstract public class MemoryManager {
 
-    //public static ArrayList<Block> memory;
-    //public Queue<Process> readyQueue;
-    //Keeps track of the position in memory of waiting processes by keeping a queue of process timestamps.
-    public Queue<Long> processQueue;
+    abstract public ArrayList<Block> admitProcess(ArrayList<Block> memory, Process incoming);
 
-    abstract public void compactMemory();
+    public MemoryManager(){}
 
-    public MemoryManager(){
-        this.processQueue = new LinkedList<Long>();
-        //this.readyQueue = new LinkedList<Process>();
+    public ArrayList<Block> compactMemory(ArrayList<Block> memory){
+        int freeSpace = 0;
+        int i = 0;
+        while(i < memory.size()){
+            if(!memory.get(i).occupied){
+                freeSpace += memory.get(i).size;
+                memory.remove(i);
+            }
+            i++;
+        }
+        memory.add(new Block(freeSpace));
+        return memory;
     }
     public void coalesceMemory(){
-        for(int i=0; i<(Memory.size()-1); i++){
-            if(Memory.get(i).occupied){
+        for(int i=0; i<(Computer.memory.size()-1); i++){
+            if(Computer.memory.get(i).occupied){
                 continue;
-            }else if(!Memory.get(i+1).occupied){
-                Memory.set(i, new Block(Memory.get(i).size + Memory.get(i+1).size));
-                Memory.remove(i+1);
+            }else if(!Computer.memory.get(i+1).occupied){
+                Computer.memory.set(i, new Block(Computer.memory.get(i).size + Computer.memory.get(i+1).size));
+                Computer.memory.remove(i+1);
             }
         }
     }
-    public void loadIntoCPU(Block block){
+    public Block loadIntoCPU(Block block){
         if(block.process.duration > 5){
             block.process.totalWaitTime += Computer.time.getCurrentTime() - block.process.startWaitTime;
             block.process.duration -= 5;
             if(block.process.duration == 0){
                 block.removeJob();
-                processQueue.poll();
+                return block;
             }
             Computer.time.incrementCurrentTime();
+            return block;
         }else{
             Computer.time.stats.totalWaitTime += (Computer.time.getCurrentTime() - block.process.startWaitTime) + block.process.totalWaitTime;
             Computer.time.incrementCurrentTime(block.process.duration);
             block.removeJob();
+            return block;
         }
-        coalesceMemory();
     }
-    abstract public void admitProcess(Process incoming);
 }

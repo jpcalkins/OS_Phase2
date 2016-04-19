@@ -1,3 +1,4 @@
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.Queue;
@@ -7,21 +8,22 @@ import java.util.Queue;
  */
 public class Memory {
 
-    private static ArrayList<Block> memory;
-    public Queue<Process> readyQueue;
+    private static ArrayList<Block> memory = new ArrayList<Block>();
     //Keeps track of the position in memory of waiting processes by keeping a queue of process timestamps.
-    public Queue<Long> processQueue;
+    public static LinkedList<Long> processQueue = new LinkedList<Long>();
     public static MemoryManager manager;
+    public StorageStrategy storageStrategy;
 
-    public Memory(MemoryManager newManager){
-        memory = new ArrayList<Block>();
+    public Memory(MemoryManager newManager, StorageStrategy newStrategy){
         memory.add(new Block(1800));
         manager = newManager;
-        processQueue = new LinkedList<Long>();
-        readyQueue = new LinkedList<Process>();
+        storageStrategy = newStrategy;
     }
     public void add(Block block){
         memory.add(block);
+    }
+    public void add(int i, Block block){
+        memory.add(i, block);
     }
     public Block get(int i){
         return memory.get(i);
@@ -34,6 +36,15 @@ public class Memory {
     }
     public void remove(int i){
         memory.remove(i);
+    }
+    public void compactMemory(){
+        memory = manager.compactMemory(memory);
+    }
+    public ArrayList<Block> getMemory(){
+        return memory;
+    }
+    public void setMemory(ArrayList<Block> inMemory){
+        memory = inMemory;
     }
     public Block getLargestOpenBlock(){
         Block largestOpenBlock = memory.get(0);
@@ -54,7 +65,6 @@ public class Memory {
         }
         return largestBlock;
     }
-
     //Clears a process from memory since it has been processed through the CPU
     public void ejectFromMemory(long id){
         for(int i=0; i<memory.size(); i++){
@@ -64,14 +74,29 @@ public class Memory {
             }
         }
     }
-    public void loadIntoCPU(Block block){
-        manager.loadIntoCPU(block);
-    }
     public void admitProcess(Process incoming){
-        manager.admitProcess(incoming);
+        if(getLargestOpenBlock().size >= Disk.nextJobOnDisk().size){
+            memory = storageStrategy.addProcess(memory, Disk.getJobOnDisk());
+            Disk.add(incoming);
+        }else{
+            memory = storageStrategy.addProcess(memory, incoming);
+        }
     }
-    //Helper method that is used to pass memory to the measurement class to calculate statistics.
-    public static ArrayList<Block> getMemory(){
-        return memory;
+    public void loadCPU(){
+        long id = processQueue.poll();
+        for(int i=0; i<memory.size(); i++) {
+            if (memory.get(i).occupied && memory.get(i).process.timeStamp == id) {
+                Block returned = manager.loadIntoCPU(memory.get(i));
+                memory.set(i, returned);
+                if(returned.size != 0){
+                    processQueue.addLast(id);
+                }
+                manager.coalesceMemory();
+                break;
+            }
+        }
+    }
+    public static void addToProcessQueue(Long id){
+        processQueue.addLast(id);
     }
 }

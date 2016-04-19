@@ -1,43 +1,30 @@
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.Queue;
-
 /**
  * Created by Jacob on 4/11/16.
  */
 public class Computer {
 
     public static Timer time = new Timer();
-    public static StorageStrategy storageStrategy;
-    //public static MemoryManager memoryManager;
     public static Memory memory;
     public Process nextProcess;
-//    public static ArrayList<Block> memory;
-//    public Queue<Process> readyQueue;
-//    //Keeps track of the position in memory of waiting processes by keeping a queue of process timestamps.
-//    public Queue<Long> processQueue;
+    public static Disk disk = new Disk();
 
     public Computer(StorageStrategy newStorage, MemoryManager newManager){
-        storageStrategy = newStorage;
-        memory = new Memory(newManager);
+        memory = new Memory(newManager, newStorage);
         nextProcess = Process.randJob(time.getPreviousTime());
-        //memoryManager = newManager;
-        //memory = new ArrayList<Block>();
-        //memory.add(new Block(1800));
-//        this.processQueue = new LinkedList<Long>();
-//        this.readyQueue = new LinkedList<Process>();
     }
     public void startComputer(){
         Process firstProcess = Process.randJob(0);
-        storageStrategy.addProcess(firstProcess);
+        memory.admitProcess(firstProcess);
+        //memory.setMemory(storageStrategy.addProcess(memory.getMemory(), firstProcess));
         while(time.getCurrentTime() < memory.get(0).process.toa){
             time.incrementCurrentTime();
         }
-        memory.loadIntoCPU(memory.get(0));
+        memory.loadCPU();
         while(true){
             generateJobs();
             if(memory.processQueue.peek() != null){
-                runProcess(memory.processQueue.poll());
+                memory.loadCPU();
+                //runProcess(memory.processQueue.poll());
             }
         }
     }
@@ -90,17 +77,7 @@ public class Computer {
 //            processReadyQueue();
 //        }
     }
-    public void runProcess(long id){
-        for(int i=0; i<memory.size(); i++){
-            if(memory.get(i).occupied && memory.get(i).process.timeStamp == id){
-                //time.stats.totalJobs++;
-                //time.stats.totalProcessingTime += memory.get(i).process.duration;
-                //time.stats.totalWaitTime += time.getCurrentTime()-memory.get(i).process.startWaitTime;
-                //time.incrementCurrentTime(memory.get(i).process.duration);
-                memory.loadIntoCPU(memory.get(i));
-                //ejectFromMemory(id);
-                break;
-            }
-        }
+    public void addToDisk(Process process){
+        Disk.add(process);
     }
 }

@@ -14,6 +14,7 @@ public class Block implements Comparable<Block> {
     public void removeJob(){
         this.occupied = false;
         this.process = null;
+        Computer.memory.manager.coalesceMemory();
     }
     //f. Adds a process to a block, making it occupied.
     public Block addJobToBlock(Process process){

@@ -32,11 +32,11 @@ public class Measurement {
     }
     //f. Calculates storage Utilization.
     public int getStorageUtilization(){
-        ArrayList<Block> memory = StorageStrategy.getMemory();
+        ArrayList<Block> memory = Computer.memory.getMemory();
         int spaceOccupied = 0;
         for(int i=0; i<memory.size(); i++){
-            if(memory.get(i).occupied){
-                spaceOccupied += memory.get(i).size;
+            if(Computer.memory.get(i).occupied){
+                spaceOccupied += Computer.memory.get(i).size;
             }
         }
         //spaceOccupied and totalmemory must be cast to doubles to avoid integer division, multiply by 100 to get percentage, and cast back to int to round to whole number
@@ -44,18 +44,18 @@ public class Measurement {
     }
     //f. Calculates external fragmentation
     public int getExternalFragmentation(){
-        ArrayList<Block> memory = StorageStrategy.getMemory();
+        ArrayList<Block> memory = Computer.memory.getMemory();
         int fragmentation = 0;
         for(int i=0; i<memory.size(); i++){
-            if(memory.get(i).size < SMALLESTJOB){
-                fragmentation += memory.get(i).size;
+            if(Computer.memory.get(i).size < SMALLESTJOB){
+                fragmentation += Computer.memory.get(i).size;
             }
         }
         return fragmentation;
     }
     //f. Calculates average hole size
     public int getAvgHoleSize(){
-        ArrayList<Block> memory = StorageStrategy.getMemory();
+        ArrayList<Block> memory = Computer.memory.getMemory();
         return (TOTALMEMORY/memory.size());
     }
     //f. For printing stats at 1000VTU intervals, because 1000 is also a multiple of 100, I print the stats for 100 VTU intervals as well.

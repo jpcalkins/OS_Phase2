@@ -5,17 +5,10 @@
 import java.util.*;
 
 abstract public class StorageStrategy {
-//    public Queue<Process> readyQueue;
-//    //Keeps track of the position in memory of waiting processes by keeping a queue of process timestamps.
-//    public Queue<Long> processQueue;
 
+    abstract public ArrayList<Block> addProcess(ArrayList<Block> memory, Process incomingProcess);
 
-    abstract public void addProcess(Process incomingProcess);
-
-    public StorageStrategy(){
-//        this.processQueue = new LinkedList<Long>();
-//        this.readyQueue = new LinkedList<Process>();
-    }
+    public StorageStrategy(){}
     //Starts the simulation and keeps the simulation running.
 //    public void startComputer(){
 //        //Process firstProcess = Process.randJob(0);
