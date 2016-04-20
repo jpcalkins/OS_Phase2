@@ -7,8 +7,6 @@ import java.util.Queue;
  */
 abstract public class MemoryManager {
 
-    abstract public ArrayList<Block> admitProcess(ArrayList<Block> memory, Process incoming);
-
     public MemoryManager(){}
 
     public ArrayList<Block> compactMemory(ArrayList<Block> memory){
@@ -18,13 +16,14 @@ abstract public class MemoryManager {
             if(!memory.get(i).occupied){
                 freeSpace += memory.get(i).size;
                 memory.remove(i);
+                continue;
             }
             i++;
         }
         memory.add(new Block(freeSpace));
         return memory;
     }
-    public void coalesceMemory(){
+    public static void coalesceMemory(){
         for(int i=0; i<(Computer.memory.size()-1); i++){
             if(Computer.memory.get(i).occupied){
                 continue;
@@ -38,17 +37,17 @@ abstract public class MemoryManager {
         if(block.process.duration > 5){
             block.process.totalWaitTime += Computer.time.getCurrentTime() - block.process.startWaitTime;
             block.process.duration -= 5;
-            if(block.process.duration == 0){
-                block.removeJob();
-                return block;
-            }
+//            if(block.process.duration == 0){
+//                block.removeJob();
+//                return block;
+//            }
             Computer.time.incrementCurrentTime();
-            return block;
+            block.process.setStartWaitTime(Computer.time.getCurrentTime());
         }else{
             Computer.time.stats.totalWaitTime += (Computer.time.getCurrentTime() - block.process.startWaitTime) + block.process.totalWaitTime;
             Computer.time.incrementCurrentTime(block.process.duration);
             block.removeJob();
-            return block;
         }
+        return block;
     }
 }

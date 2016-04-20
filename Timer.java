@@ -3,34 +3,34 @@
  */
 public class Timer {
     //Current time keeps track of CPU events
-    private int currentTime;
+    private static int currentTime;
     //Previous time tracks events in memory
-    private int previousTime;
+    private static int previousTime;
     //Stats keeps track of fragmentation, rejected jobs, etc.
-    public Measurement stats;
+    public static Measurement stats;
     private final int QUANTUM = 5;
 
     public Timer(){
-        this.currentTime = 0;
-        this.previousTime = 0;
-        this.stats = new Measurement();
+        currentTime = 0;
+        previousTime = 0;
+        stats = new Measurement();
     }
 
     public int getCurrentTime(){
-        return this.currentTime;
+        return currentTime;
     }
     public int getPreviousTime(){
-        return this.previousTime;
+        return previousTime;
     }
     //f. Increments CPU timeline
     public void incrementCurrentTime(int increment){
-        this.currentTime += increment;
+        currentTime += increment;
     }
     public void incrementCurrentTime(){
-        this.currentTime += QUANTUM;
+        currentTime += QUANTUM;
     }
     //f. Increments memory timeline and outputs any statistics if time has passed a necessary interval.
-    public void incrementPrevTime(int increment){
+    public static void incrementPrevTime(int increment){
         //This chain of ifs help me establish if time has passed a moment when statistics need to be printed.
         if(previousTime + increment >= 5000){
             System.out.println("Printing stats for time point 5000 VTUs.");
@@ -52,20 +52,23 @@ public class Timer {
                 System.out.println();
             }
         }
-        this.previousTime += increment;
+        previousTime += increment;
         //Error Checking
-        if (this.previousTime > this.currentTime) {
-            System.out.println("ERROR! previous time has exceeded current time.");
+        if (previousTime > currentTime) {
+            System.out.println("ERROR! previous time, "+ previousTime +", has exceeded current time, "+ currentTime +".");
         }
     }
     //f. Sets memory timeline equla to CPU timeline.
     public void returnToPresent(){
         //Sets memory timeline equal to that of CPU timeline.
         if(previousTime < currentTime){
-            incrementPrevTime(this.currentTime - this.previousTime);
+            incrementPrevTime(currentTime - previousTime);
         //Error checking case.
         }else if(previousTime > currentTime){
             System.out.println("ERROR! previous time has exceeded current time.");
         }
+    }
+    public static void setPreviousTime(int input){
+        incrementPrevTime(input - previousTime);
     }
 }

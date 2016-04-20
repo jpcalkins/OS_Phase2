@@ -8,23 +8,25 @@ import java.util.Queue;
  */
 public class Memory {
 
-    private static ArrayList<Block> memory = new ArrayList<Block>();
+    private static ArrayList<Block> memory;
     //Keeps track of the position in memory of waiting processes by keeping a queue of process timestamps.
-    public static LinkedList<Long> processQueue = new LinkedList<Long>();
+    public static LinkedList<Long> processQueue;
     public static MemoryManager manager;
     public StorageStrategy storageStrategy;
 
     public Memory(MemoryManager newManager, StorageStrategy newStrategy){
+        memory = new ArrayList<Block>();
         memory.add(new Block(1800));
         manager = newManager;
         storageStrategy = newStrategy;
+        processQueue = new LinkedList<Long>();
     }
-    public void add(Block block){
-        memory.add(block);
-    }
-    public void add(int i, Block block){
-        memory.add(i, block);
-    }
+//    public void add(Block block){
+//        memory.add(block);
+//    }
+//    public void add(int i, Block block){
+//        memory.add(i, block);
+//    }
     public Block get(int i){
         return memory.get(i);
     }
@@ -37,9 +39,9 @@ public class Memory {
     public void remove(int i){
         memory.remove(i);
     }
-    public void compactMemory(){
-        memory = manager.compactMemory(memory);
-    }
+//    public void compactMemory(){
+//        memory = manager.compactMemory(memory);
+//    }
     public ArrayList<Block> getMemory(){
         return memory;
     }
@@ -55,27 +57,28 @@ public class Memory {
         }
         return largestOpenBlock;
     }
-
-    public Block getLargestBlock(){
-        Block largestBlock = memory.get(0);
-        for(int i=1; i<memory.size(); i++){
-            if(memory.get(i).size > largestBlock.size){
-                largestBlock = memory.get(i);
-            }
-        }
-        return largestBlock;
-    }
+//
+//    public Block getLargestBlock(){
+//        Block largestBlock = memory.get(0);
+//        for(int i=1; i<memory.size(); i++){
+//            if(memory.get(i).size > largestBlock.size){
+//                largestBlock = memory.get(i);
+//            }
+//        }
+//        return largestBlock;
+//    }
     //Clears a process from memory since it has been processed through the CPU
-    public void ejectFromMemory(long id){
-        for(int i=0; i<memory.size(); i++){
-            if(memory.get(i).occupied && memory.get(i).process.timeStamp == id){
-                memory.get(i).removeJob();
-                break;
-            }
-        }
-    }
+//    public void ejectFromMemory(long id){
+//        for(int i=0; i<memory.size(); i++){
+//            if(memory.get(i).occupied && memory.get(i).process.timeStamp == id){
+//                memory.get(i).removeJob();
+//                break;
+//            }
+//        }
+//    }
     public void admitProcess(Process incoming){
-        if(getLargestOpenBlock().size >= Disk.nextJobOnDisk().size){
+        Timer.setPreviousTime(incoming.toa);
+        if(Disk.nextJobOnDisk() != null && getLargestOpenBlock().size >= Disk.nextJobOnDisk().size){
             memory = storageStrategy.addProcess(memory, Disk.getJobOnDisk());
             Disk.add(incoming);
         }else{
@@ -91,12 +94,22 @@ public class Memory {
                 if(returned.size != 0){
                     processQueue.addLast(id);
                 }
-                manager.coalesceMemory();
+                MemoryManager.coalesceMemory();
                 break;
             }
         }
     }
     public static void addToProcessQueue(Long id){
         processQueue.addLast(id);
+    }
+    public static Integer firstOpenBlock(){
+        Integer temp = new Integer(null);
+        for(int i=0; i<memory.size(); i++){
+            if(!memory.get(i).occupied){
+                temp = new Integer(i);
+                return temp;
+            }
+        }
+        return temp;
     }
 }

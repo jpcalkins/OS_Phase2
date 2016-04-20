@@ -1,34 +1,48 @@
 /**
  * a. Jacob Calkins
  * b. CS 4323
- * c. Simulation Project, Phase 1
+ * c. Simulation Project, Phase 2
  * d. Sarath Kumar Maddinani
  * e. bestFit, firstFit, and worstfit are the different memory allocation strategies and are called based upon flags passed at program startup.
  * f. Main class that starts the "computer" with the desired memory allocation strategy.
  */
+import java.util.Scanner;
+
 public class Main {
 
-    public static BestFitStorage bestFit;
-    public static FirstFitStorage firstFit;
-    public static WorstFitStorage worstFit;
+    private static StorageStrategy strategy;
+    private static MemoryManager manager;
 
     public static void main(String[] args) {
+        Scanner scan = new Scanner(System.in);
         if(args.length < 1){
             System.out.println("Run the program with a b flag to simulate best-fit storage strategy.\nRun the program with a w flag to simulate worst-fit storage strategy.\nRun the program with a f flag to simulate first-fit storage strategy.");
+            System.exit(0);
         } else if (args[0].toLowerCase().equals("b")) {
             System.out.println("Best-fit memory allocation simulation");
-            bestFit = new BestFitStorage();
-            bestFit.startComputer();
+            strategy = new BestFitStorage();
         } else if (args[0].toLowerCase().equals("f")) {
             System.out.println("First-fit memory allocation simulation");
-            firstFit = new FirstFitStorage();
-            firstFit.startComputer();
+            strategy = new FirstFitStorage();
         } else if (args[0].toLowerCase().equals("w")) {
             System.out.println("Worst-fit memory allocation simulation");
-            worstFit = new WorstFitStorage();
-            worstFit.startComputer();
+            strategy = new WorstFitStorage();
         } else {
             System.out.println("Run the program with a b flag to simulate best-fit storage strategy.\nRun the program with a w flag to simulate worst-fit storage strategy.\nRun the program with a f flag to simulate first-fit storage strategy.");
+            System.exit(0);
         }
+        System.out.println("Enter 1 to run the simulation with compaction occurring when a memory request is denied." +
+                "\nEnter 2 to run the simulation with compaction occurring every 250 VTUs" +
+                "\nEnter 3 to run the simulation with compaction occurring every 500 VTUs.");
+        String compacter = scan.nextLine();
+        if(compacter.equals("1")){
+            manager = new CompactDeny();
+        }else if(compacter.equals("2")){
+            manager = new Compact250();
+        }else if(compacter.equals("3")){
+            manager = new Compact500();
+        }
+        Computer computer = new Computer(strategy, manager);
+        computer.startComputer();
     }
 }
