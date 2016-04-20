@@ -9,11 +9,17 @@ public class Computer {
     //Processes that are being introduced into the system.
     public Process nextProcess;
     public static Disk disk = new Disk();
+    //basic counter that will insure that no two processes get the same timestamp.
+    public static int counter = 0;
 
     public Computer(StorageStrategy newStorage, MemoryManager newManager){
         time = new Timer();
         memory = new Memory(newManager, newStorage);
         nextProcess = Process.randJob(time.getPreviousTime());
+    }
+    public static int getCounter(){
+        counter++;
+        return (counter - 1);
     }
     public void startComputer(){
         Process firstProcess = Process.randJob(0);

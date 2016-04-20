@@ -11,7 +11,7 @@ public class Disk {
         disk = new LinkedList<Process>();
     }
     public static void add(Process process){
-        if(disk.size() <= MAXSIZE){
+        if(disk.size() < MAXSIZE){
             disk.add(process);
         }
     }

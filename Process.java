@@ -20,7 +20,8 @@ public class Process {
         this.duration = duration;
         this.toa = toa;
         this.startWaitTime = time;
-        this.timeStamp = System.currentTimeMillis();
+        //Previously used System.currentTimeMillis(); but was getting multiple processes w/ the same timestamp.
+        this.timeStamp = ((long)Computer.getCounter());//System.currentTimeMillis();
         this.totalWaitTime = 0;
     }
     public void setStartWaitTime(int time){
