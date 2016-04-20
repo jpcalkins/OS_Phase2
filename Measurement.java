@@ -2,6 +2,8 @@
  * f. Class calculates statistics of how memory is utilized.
  */
 import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.Queue;
 
 public class Measurement {
     public int totalJobs;
@@ -30,18 +32,6 @@ public class Measurement {
     public int getAvgTurnaround(){
         return (getAvgProcessing() + getAvgWait());
     }
-    //f. Calculates storage Utilization.
-    public int getStorageUtilization(){
-        ArrayList<Block> memory = Computer.memory.getMemory();
-        int spaceOccupied = 0;
-        for(int i=0; i<memory.size(); i++){
-            if(Computer.memory.get(i).occupied){
-                spaceOccupied += Computer.memory.get(i).size;
-            }
-        }
-        //spaceOccupied and totalmemory must be cast to doubles to avoid integer division, multiply by 100 to get percentage, and cast back to int to round to whole number
-        return (int)(((double)spaceOccupied/(double)TOTALMEMORY)*100);
-    }
     //f. Calculates external fragmentation
     public int getExternalFragmentation(){
         ArrayList<Block> memory = Computer.memory.getMemory();
@@ -60,13 +50,20 @@ public class Measurement {
     }
     //f. For printing stats at 1000VTU intervals, because 1000 is also a multiple of 100, I print the stats for 100 VTU intervals as well.
     public void output1000(){
-        //System.out.println("Rejected Jobs:\t" + rejectedJobs);
+        LinkedList<Process> disk = Disk.getDisk();
+        System.out.println("Pending List Contents:");
+        for(int i=0; i<disk.size(); i++){
+            System.out.print("Process " + (i+1) + ": " + disk.get(i).toString() + "\t");
+            if((i+1)%4 == 0){
+                System.out.println();
+            }
+        }
+        System.out.println();
         output100();
     }
     //f. For printing stats at 100VTU intervals
     public void output100(){
-        System.out.println("Storage Utilization:\t" + getStorageUtilization() + "%" +
-        "\nExternal Fragmentation:\t" + getExternalFragmentation() + "K bytes" +
+        System.out.println("External Fragmentation:\t" + getExternalFragmentation() + "K bytes" +
         "\nAverage Hole Size:\t" + getAvgHoleSize() + "K bytes");
     }
     //f. For printing stats at 4000VTU time point
@@ -79,6 +76,14 @@ public class Measurement {
     }
     //f. For printing stats at 5000VTU time point
     public void output5000(){
-        //System.out.println("Rejected Jobs:\t" + rejectedJobs);
+        LinkedList<Process> disk = Disk.getDisk();
+        System.out.println("Pending List Contents:");
+        for(int i=0; i<disk.size(); i++){
+            System.out.print("Process " + (i+1) + ": " + disk.get(i).toString() + "\t");
+            if((i+1)%4 == 0){
+                System.out.println();
+            }
+        }
+        System.out.println();
     }
 }

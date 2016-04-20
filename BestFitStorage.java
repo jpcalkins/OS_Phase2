@@ -9,15 +9,16 @@ public class BestFitStorage extends StorageStrategy {
     public ArrayList<Block> addProcess(ArrayList<Block> memory, Process incomingProcess){
         Computer.time.stats.totalProcessingTime += incomingProcess.duration;
         Computer.time.stats.totalJobs++;
-        boolean available = false;
-        int index = 0;
-        if(Memory.firstOpenBlock() != null){
-            index = Memory.firstOpenBlock();
-        } else{
+        boolean available;
+        int index;
+        if(Memory.firstOpenBlock(incomingProcess) == 9999){
             Disk.add(incomingProcess);
             return memory;
+        } else{
+            available = true;
+            index = Memory.firstOpenBlock(incomingProcess);
         }
-        for(int i=0; i<memory.size(); i++){
+        for(int i=index; i<memory.size(); i++){
             if(!memory.get(i).occupied && memory.get(i).size >= incomingProcess.size && memory.get(i).size <= memory.get(index).size){
                 available = true;
                 index = i;

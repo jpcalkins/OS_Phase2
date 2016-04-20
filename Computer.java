@@ -12,7 +12,6 @@ public class Computer {
         time = new Timer();
         memory = new Memory(newManager, newStorage);
         nextProcess = Process.randJob(time.getPreviousTime());
-        //startComputer();
     }
     public void startComputer(){
         Process firstProcess = Process.randJob(0);
@@ -25,7 +24,6 @@ public class Computer {
             generateJobs();
             if(memory.processQueue.peek() != null){
                 memory.loadCPU();
-                //runProcess(memory.processQueue.poll());
             }
         }
     }

@@ -31,6 +31,15 @@ public class Timer {
     }
     //f. Increments memory timeline and outputs any statistics if time has passed a necessary interval.
     public static void incrementPrevTime(int increment){
+        if(previousTime % 250 > previousTime + increment % 250){
+            if(Memory.manager instanceof Compact250){
+                Computer.memory.setMemory(Memory.manager.compactMemory(Computer.memory.getMemory()));
+            }
+        }else if(previousTime % 500 > previousTime + increment % 500){
+            if(Memory.manager instanceof Compact500){
+                Computer.memory.setMemory(Memory.manager.compactMemory(Computer.memory.getMemory()));
+            }
+        }
         //This chain of ifs help me establish if time has passed a moment when statistics need to be printed.
         if(previousTime + increment >= 5000){
             System.out.println("Printing stats for time point 5000 VTUs.");

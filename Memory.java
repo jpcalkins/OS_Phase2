@@ -21,12 +21,6 @@ public class Memory {
         storageStrategy = newStrategy;
         processQueue = new LinkedList<Long>();
     }
-//    public void add(Block block){
-//        memory.add(block);
-//    }
-//    public void add(int i, Block block){
-//        memory.add(i, block);
-//    }
     public Block get(int i){
         return memory.get(i);
     }
@@ -39,9 +33,6 @@ public class Memory {
     public void remove(int i){
         memory.remove(i);
     }
-//    public void compactMemory(){
-//        memory = manager.compactMemory(memory);
-//    }
     public ArrayList<Block> getMemory(){
         return memory;
     }
@@ -57,25 +48,6 @@ public class Memory {
         }
         return largestOpenBlock;
     }
-//
-//    public Block getLargestBlock(){
-//        Block largestBlock = memory.get(0);
-//        for(int i=1; i<memory.size(); i++){
-//            if(memory.get(i).size > largestBlock.size){
-//                largestBlock = memory.get(i);
-//            }
-//        }
-//        return largestBlock;
-//    }
-    //Clears a process from memory since it has been processed through the CPU
-//    public void ejectFromMemory(long id){
-//        for(int i=0; i<memory.size(); i++){
-//            if(memory.get(i).occupied && memory.get(i).process.timeStamp == id){
-//                memory.get(i).removeJob();
-//                break;
-//            }
-//        }
-//    }
     public void admitProcess(Process incoming){
         Timer.setPreviousTime(incoming.toa);
         if(Disk.nextJobOnDisk() != null && getLargestOpenBlock().size >= Disk.nextJobOnDisk().size){
@@ -90,7 +62,12 @@ public class Memory {
         for(int i=0; i<memory.size(); i++) {
             if (memory.get(i).occupied && memory.get(i).process.timeStamp == id) {
                 Block returned = manager.loadIntoCPU(memory.get(i));
-                memory.set(i, returned);
+                try{
+                    memory.set(i, returned);
+                }catch (IndexOutOfBoundsException e){
+                    memory.add(returned);
+                }
+
                 if(returned.size != 0){
                     processQueue.addLast(id);
                 }
@@ -102,11 +79,11 @@ public class Memory {
     public static void addToProcessQueue(Long id){
         processQueue.addLast(id);
     }
-    public static Integer firstOpenBlock(){
-        Integer temp = new Integer(null);
+    public static int firstOpenBlock(Process incomingProcess){
+        int temp = 9999;
         for(int i=0; i<memory.size(); i++){
-            if(!memory.get(i).occupied){
-                temp = new Integer(i);
+            if(!memory.get(i).occupied && memory.get(i).size >= incomingProcess.size){
+                temp = i;
                 return temp;
             }
         }

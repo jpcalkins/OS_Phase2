@@ -37,10 +37,6 @@ abstract public class MemoryManager {
         if(block.process.duration > 5){
             block.process.totalWaitTime += Computer.time.getCurrentTime() - block.process.startWaitTime;
             block.process.duration -= 5;
-//            if(block.process.duration == 0){
-//                block.removeJob();
-//                return block;
-//            }
             Computer.time.incrementCurrentTime();
             block.process.setStartWaitTime(Computer.time.getCurrentTime());
         }else{

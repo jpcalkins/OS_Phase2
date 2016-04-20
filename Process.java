@@ -50,4 +50,7 @@ public class Process {
         int max = 10;
         return myRandom.nextInt(max-min+1)+min;
     }
+    public String toString(){
+        return "Size: " + size + " Duration: " + duration;
+    }
 }
