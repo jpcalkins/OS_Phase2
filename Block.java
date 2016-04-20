@@ -2,9 +2,11 @@
  * f. Represents a block in memory and the process that may be occupying that block.
  */
 public class Block implements Comparable<Block> {
+
     public int size;
     public boolean occupied;
     public Process process;
+
     //f. Constructs an empty block class with a size passed in the arguments.
     public Block(int size){
         this.size = size;

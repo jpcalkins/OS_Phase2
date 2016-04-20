@@ -3,7 +3,6 @@
  * g. Class could have been named Process, as that is what it is mimicking, but this was already implemented before learning proper terminology.
  */
 import java.util.Random;
-//import java.util.concurrent.ThreadLocalRandom;
 
 public class Process {
     public int size;

@@ -1,17 +1,17 @@
-import java.lang.reflect.Array;
+/**
+ * f. Contains the memory and all the memory managers that are associated with it.
+ */
 import java.util.ArrayList;
 import java.util.LinkedList;
-import java.util.Queue;
 
-/**
- * Created by Jacob on 4/17/16.
- */
 public class Memory {
 
     private static ArrayList<Block> memory;
     //Keeps track of the position in memory of waiting processes by keeping a queue of process timestamps.
     public static LinkedList<Long> processQueue;
+    //Memory manager that focuses on coalescence and compaction
     public static MemoryManager manager;
+    //Memory manager that controls how processes are added to blocks.
     public StorageStrategy storageStrategy;
 
     public Memory(MemoryManager newManager, StorageStrategy newStrategy){
@@ -48,6 +48,7 @@ public class Memory {
         }
         return largestOpenBlock;
     }
+    //f. Admits processes to memory.
     public void admitProcess(Process incoming){
         Timer.setPreviousTime(incoming.toa);
         if(Disk.nextJobOnDisk() != null && getLargestOpenBlock().size >= Disk.nextJobOnDisk().size){
@@ -57,6 +58,7 @@ public class Memory {
             memory = storageStrategy.addProcess(memory, incoming);
         }
     }
+    //f. Loads things from the process Queue into the CPU.
     public void loadCPU(){
         long id = processQueue.poll();
         for(int i=0; i<memory.size(); i++) {
@@ -79,6 +81,7 @@ public class Memory {
     public static void addToProcessQueue(Long id){
         processQueue.addLast(id);
     }
+    //f. Method to find if there exists an open block in memory and returns that index for the StorageStrategy classes.
     public static int firstOpenBlock(Process incomingProcess){
         int temp = 9999;
         for(int i=0; i<memory.size(); i++){

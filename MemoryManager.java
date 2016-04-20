@@ -1,10 +1,8 @@
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.Queue;
-
 /**
- * Created by Jacob on 4/11/16.
+ * f. Abstract class that is for the memory manager involved in compaction and coalescence.
  */
+import java.util.ArrayList;
+
 abstract public class MemoryManager {
 
     public MemoryManager(){}
@@ -33,6 +31,7 @@ abstract public class MemoryManager {
             }
         }
     }
+    //f. Method that physically loads a job into the "CPU"
     public Block loadIntoCPU(Block block){
         if(block.process.duration > 5){
             block.process.totalWaitTime += Computer.time.getCurrentTime() - block.process.startWaitTime;

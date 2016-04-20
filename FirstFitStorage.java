@@ -4,7 +4,7 @@
 import java.util.ArrayList;
 
 public class FirstFitStorage extends StorageStrategy {
-    //f. Traverses the memory list in order to find the first open block.
+
     public ArrayList<Block> addProcess(ArrayList<Block> memory, Process incomingProcess){
         Computer.time.stats.totalProcessingTime += incomingProcess.duration;
         Computer.time.stats.totalJobs++;

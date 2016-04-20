@@ -2,8 +2,8 @@
  * a. Jacob Calkins
  * b. CS 4323
  * c. Simulation Project, Phase 2
- * d. Sarath Kumar Maddinani
- * e. bestFit, firstFit, and worstfit are the different memory allocation strategies and are called based upon flags passed at program startup.
+ * d. 04/20/2016
+ * e. Strategy is the selected storage strategy; best-fit, worst-fit, first-fit. Manager is the selected memory manager that dictates compaction.
  * f. Main class that starts the "computer" with the desired memory allocation strategy.
  */
 import java.util.Scanner;

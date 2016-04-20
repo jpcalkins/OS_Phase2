@@ -1,11 +1,10 @@
 /**
  * f. Class that implements a worst-fit memory allocation strategy.
- * g. Sorts memory blocks to make finding the proper open block easier.
+ * g. g. Finding the desired block could be more efficient as in a real system.
  */
 import java.util.ArrayList;
 
 public class WorstFitStorage extends StorageStrategy {
-    //f. Sorts memory into ascending order based upon block size, then traverses the list backwards to find the largest, open block to place the process into.
     public ArrayList<Block> addProcess(ArrayList<Block> memory, Process incomingProcess){
         Computer.time.stats.totalProcessingTime += incomingProcess.duration;
         Computer.time.stats.totalJobs++;

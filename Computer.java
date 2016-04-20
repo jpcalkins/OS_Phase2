@@ -1,10 +1,12 @@
 /**
- * Created by Jacob on 4/11/16.
+ * f. Class that holds all parts of the "computer" and controls the workflow.
  */
 public class Computer {
 
+    //Mimics the computer's clock.
     public static Timer time;
     public static Memory memory;
+    //Processes that are being introduced into the system.
     public Process nextProcess;
     public static Disk disk = new Disk();
 

@@ -1,9 +1,8 @@
-import java.util.LinkedList;
-import java.util.Queue;
-
 /**
- * Created by Jacob on 4/11/16.
+ * f. Class that mimics a disk for storage.
  */
+import java.util.LinkedList;
+
 public class Disk {
     public static LinkedList<Process> disk;
     public static final int MAXSIZE = 100;
@@ -12,9 +11,7 @@ public class Disk {
         disk = new LinkedList<Process>();
     }
     public static void add(Process process){
-        if(disk.size() == MAXSIZE){
-            //System.out.println("Can't add job to disk. Disk is full.");
-        }else{
+        if(disk.size() <= MAXSIZE){
             disk.add(process);
         }
     }
